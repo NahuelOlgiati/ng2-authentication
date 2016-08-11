@@ -9,17 +9,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+var router_1 = require('@angular/router');
 var forms_1 = require("@angular/forms");
 var auth_service_1 = require("./auth.service");
 var SignupComponent = (function () {
-    function SignupComponent(fb, authService) {
+    function SignupComponent(fb, router, authService) {
         this.fb = fb;
+        this.router = router;
         this.authService = authService;
         this.error = false;
         this.errorMessage = '';
     }
+    // signin the new user if signup successfully
+    SignupComponent.prototype.signin = function () {
+        var _this = this;
+        console.log('Entrando Signup signin');
+        this.authService.signinUser(this.myForm.value)
+            .subscribe(function (res) {
+            if (res.success) {
+                _this.authService.saveToken(res.token);
+                _this.router.navigate(['/']);
+            }
+            else {
+                _this.error = res.msg;
+            }
+        });
+    };
+    // create the new user
     SignupComponent.prototype.onSignup = function () {
-        this.authService.signupUser(this.myForm.value);
+        var _this = this;
+        console.log('Entrando Signup onSignup');
+        this.authService.signupUser(this.myForm.value)
+            .subscribe(function (res) {
+            if (res.success) {
+                // signin the new user
+                _this.signin();
+            }
+            else {
+                _this.error = res.msg;
+            }
+        });
     };
     SignupComponent.prototype.ngOnInit = function () {
         this.myForm = this.fb.group({
@@ -51,7 +80,7 @@ var SignupComponent = (function () {
         core_1.Component({
             template: "\n        <h3>Please sign up to use all features</h3>\n        <form [formGroup]=\"myForm\" (ngSubmit)=\"onSignup()\">\n            <div class=\"form-group\">\n                <label for=\"email\">E-Mail</label>\n                <input formControlName=\"email\" type=\"email\" id=\"email\" #email class=\"form-control\">\n                <span *ngIf=\"!email.pristine && email.errors != null && email.errors['noEmail']\">Invalid mail address</span>\n            </div>\n            <div class=\"form-group\">\n                <label for=\"password\">Password</label>\n                <input formControlName=\"password\" type=\"password\" id=\"password\" class=\"form-control\">\n            </div>\n            <div class=\"form-group\">\n                <label for=\"confirm-password\">Confirm Password</label>\n                <input formControlName=\"confirmPassword\" type=\"password\" id=\"confirm-password\" #confirmPassword class=\"form-control\">\n                <span *ngIf=\"!confirmPassword.pristine && confirmPassword.errors != null && confirmPassword.errors['passwordsNotMatch']\">Passwords do not match</span>\n            </div>\n            <button type=\"submit\" [disabled]=\"!myForm.valid\" class=\"btn btn-primary\">Sign Up</button>\n        </form>\n    "
         }), 
-        __metadata('design:paramtypes', [forms_1.FormBuilder, auth_service_1.AuthService])
+        __metadata('design:paramtypes', [forms_1.FormBuilder, router_1.Router, auth_service_1.AuthService])
     ], SignupComponent);
     return SignupComponent;
 }());

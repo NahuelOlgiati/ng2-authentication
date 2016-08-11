@@ -1,40 +1,75 @@
 import { Injectable } from "@angular/core";
+import { Http, Response, Headers } from "@angular/http";
+import { Observable } from 'rxjs/Observable';
+import { Router } from "@angular/router";
+import { Subject } from "rxjs/Subject";
+import 'rxjs/Rx';
 
 import { User } from "../shared/user.interface";
-import { Router } from "@angular/router";
-
-declare var firebase: any;
 
 @Injectable()
 export class AuthService {
-  constructor(private router: Router) {}
+
+  // for change the navbar state between online and offline
+  private authenticate = new Subject<boolean>();
+  authenticateState$ = this.authenticate.asObservable();
+
+  constructor(private http: Http, private router: Router) { }
 
   signupUser(user: User) {
-    firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-      .catch(function (error) {
+    console.log('Entrando Serv signupUser');
+    const body = 'email=' + user.email + '&password=' + user.password;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    //headers.append('Authorization', 'Basic QmFzaWM6QmFzaWM=');
+    return this.http.post('http://localhost:8080/villegas-tax-web/rest/user', body, {
+      headers: headers
+    })
+      .map((res:Response) => res.json())
+      .catch(error => {
+        console.log('Falló signupUser Mapeo');
         console.log(error);
+        return Observable.throw(error.json());
       });
   }
 
   signinUser(user: User) {
-    firebase.auth().signInWithEmailAndPassword(user.email, user.password)
-      .catch(function (error) {
-        console.log(error);
+    console.log('Entrando Serv signinUser');
+    const body = 'email=' + user.email + '&password=' + user.password;
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+    return this.http.post('http://localhost:8080/villegas-tax-web/rest/user', body, {
+      headers: headers
+    })
+      .map(res => res.json())
+      .catch(error => {
+        console.log('Falló signinUser Mapeo');
+        return Observable.throw(error.json());
       });
   }
 
-  logout() {
-    firebase.auth().signOut();
-    this.router.navigate(['/signin']);
+  // delete the token in localStorage and change the navbar state
+  logout(): void {
+    localStorage.removeItem('token');
+    this.authenticate.next(false);
   }
 
-  isAuthenticated() {
-    var user = firebase.auth().currentUser;
+  // save the token in localStorage and change the navbar state
+  saveToken(token: string): void {
+    console.log('saveToken:' + token);
+    localStorage.setItem('token', token);
+    this.authenticate.next(true);
+  }
 
-    if (user) {
-      return true;
+  // return if the user is authenticate
+  isAuthenticated(): boolean {
+    let isAuth: boolean;
+    if (localStorage.getItem('token')) {
+      isAuth = true;
     } else {
-      return false;
+      isAuth = false;
     }
+    console.log('Is Authenticated:' + isAuth);
+    return isAuth;
   }
 }

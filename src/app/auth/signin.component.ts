@@ -1,4 +1,5 @@
-import {Component, OnInit} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, REACTIVE_FORM_DIRECTIVES } from "@angular/forms";
 
 import { AuthService } from "./auth.service";
@@ -24,13 +25,23 @@ export class SigninComponent implements OnInit {
     error = false;
     errorMessage = '';
 
-    constructor(private fb: FormBuilder, private authService: AuthService) {}
+    constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) { }
 
     onSignin() {
-      this.authService.signinUser(this.myForm.value);
+        this.authService.signinUser(this.myForm.value)
+            .subscribe(
+            res => {
+                if (res.success) {
+                    this.authService.saveToken(res.token);
+                    this.router.navigate(['/']);
+                } else {
+                    this.error = res.msg;
+                }
+            }
+            )
     }
 
-    ngOnInit():any {
+    ngOnInit(): any {
         this.myForm = this.fb.group({
             email: ['', Validators.required],
             password: ['', Validators.required],

@@ -9,39 +9,75 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+var http_1 = require("@angular/http");
+var Observable_1 = require('rxjs/Observable');
 var router_1 = require("@angular/router");
+var Subject_1 = require("rxjs/Subject");
+require('rxjs/Rx');
 var AuthService = (function () {
-    function AuthService(router) {
+    function AuthService(http, router) {
+        this.http = http;
         this.router = router;
+        // for change the navbar state between online and offline
+        this.authenticate = new Subject_1.Subject();
+        this.authenticateState$ = this.authenticate.asObservable();
     }
     AuthService.prototype.signupUser = function (user) {
-        firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+        console.log('Entrando Serv signupUser');
+        var body = 'email=' + user.email + '&password=' + user.password;
+        var headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        //headers.append('Authorization', 'Basic QmFzaWM6QmFzaWM=');
+        return this.http.post('http://localhost:8080/villegas-tax-web/rest/user', body, {
+            headers: headers
+        })
+            .map(function (res) { return res.json(); })
             .catch(function (error) {
+            console.log('Falló signupUser Mapeo');
             console.log(error);
+            return Observable_1.Observable.throw(error.json());
         });
     };
     AuthService.prototype.signinUser = function (user) {
-        firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+        console.log('Entrando Serv signinUser');
+        var body = 'email=' + user.email + '&password=' + user.password;
+        var headers = new http_1.Headers();
+        headers.append('Content-Type', 'application/x-www-form-urlencoded');
+        return this.http.post('http://localhost:8080/villegas-tax-web/rest/user', body, {
+            headers: headers
+        })
+            .map(function (res) { return res.json(); })
             .catch(function (error) {
-            console.log(error);
+            console.log('Falló signinUser Mapeo');
+            return Observable_1.Observable.throw(error.json());
         });
     };
+    // delete the token in localStorage and change the navbar state
     AuthService.prototype.logout = function () {
-        firebase.auth().signOut();
-        this.router.navigate(['/signin']);
+        localStorage.removeItem('token');
+        this.authenticate.next(false);
     };
+    // save the token in localStorage and change the navbar state
+    AuthService.prototype.saveToken = function (token) {
+        console.log('saveToken:' + token);
+        localStorage.setItem('token', token);
+        this.authenticate.next(true);
+    };
+    // return if the user is authenticate
     AuthService.prototype.isAuthenticated = function () {
-        var user = firebase.auth().currentUser;
-        if (user) {
-            return true;
+        var isAuth;
+        if (localStorage.getItem('token')) {
+            isAuth = true;
         }
         else {
-            return false;
+            isAuth = false;
         }
+        console.log('Is Authenticated:' + isAuth);
+        return isAuth;
     };
     AuthService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [router_1.Router])
+        __metadata('design:paramtypes', [http_1.Http, router_1.Router])
     ], AuthService);
     return AuthService;
 }());

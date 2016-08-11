@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl, REACTIVE_FORM_DIRECTIVES } from "@angular/forms";
 
 import { AuthService } from "./auth.service";
@@ -30,10 +31,38 @@ export class SignupComponent implements OnInit {
     error = false;
     errorMessage = '';
 
-    constructor(private fb: FormBuilder, private authService: AuthService) {}
+    constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) { }
 
+    // signin the new user if signup successfully
+    signin() {
+        console.log('Entrando Signup signin');
+        this.authService.signinUser(this.myForm.value)
+            .subscribe(
+            res => {
+                if (res.success) {
+                    this.authService.saveToken(res.token);
+                    this.router.navigate(['/']);
+                } else {
+                    this.error = res.msg;
+                }
+            }
+            )
+    }
+
+    // create the new user
     onSignup() {
-      this.authService.signupUser(this.myForm.value);
+        console.log('Entrando Signup onSignup');
+        this.authService.signupUser(this.myForm.value)
+            .subscribe(
+            res => {
+                if (res.success) { // if user created successfully
+                    // signin the new user
+                    this.signin();
+                } else {
+                    this.error = res.msg;
+                }
+            }
+            )
     }
 
     ngOnInit(): any {
@@ -50,19 +79,19 @@ export class SignupComponent implements OnInit {
         });
     }
 
-    isEmail(control: FormControl): {[s: string]: boolean} {
+    isEmail(control: FormControl): { [s: string]: boolean } {
         if (!control.value.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
-            return {noEmail: true};
+            return { noEmail: true };
         }
     }
 
-    isEqualPassword(control: FormControl): {[s: string]: boolean} {
+    isEqualPassword(control: FormControl): { [s: string]: boolean } {
         if (!this.myForm) {
-            return {passwordsNotMatch: true};
+            return { passwordsNotMatch: true };
 
         }
         if (control.value !== this.myForm.controls['password'].value) {
-            return {passwordsNotMatch: true};
+            return { passwordsNotMatch: true };
         }
     }
 }
