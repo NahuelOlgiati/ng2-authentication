@@ -17,7 +17,11 @@ export class DocumentTypeService {
   }
 
   fetchData() {
-    return this.http.get('http://localhost:8080/villegas-tax-web/rest/documentType')
+    const headers = new Headers();
+    headers.append('Authorization', 'Basic ' + localStorage.getItem('token'));
+    return this.http.get('http://localhost:8080/villegas-tax-portal/rest/documentType', {
+      headers: headers
+    })
       .map((response: Response) => response.json())
       .subscribe(
       (data: DocumentType[]) => {
