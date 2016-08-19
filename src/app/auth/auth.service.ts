@@ -18,11 +18,10 @@ export class AuthService {
 
   signupUser(user: User) {
     console.log('Entrando Serv signupUser');
-    const body = 'email=' + user.email + '&password=' + user.password;
+    const body = 'email=' + user.email + '&username=' + user.username + '&password=' + user.password;
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    //headers.append('Authorization', 'Basic QmFzaWM6QmFzaWM=');
-    return this.http.post('http://localhost:8080/villegas-tax-portal/rest/authentication', body, {
+    return this.http.post('http://localhost:8080/villegas-tax-portal/rest/authentication/signup', body, {
       headers: headers
     })
       .map((res:Response) => res.json())
@@ -35,10 +34,10 @@ export class AuthService {
 
   signinUser(user: User) {
     console.log('Entrando Serv signinUser');
-    const body = 'email=' + user.email + '&password=' + user.password;
+    const body = 'username=' + user.username + '&password=' + user.password;
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post('http://localhost:8080/villegas-tax-portal/rest/authentication', body, {
+    return this.http.post('http://localhost:8080/villegas-tax-portal/rest/authentication/signin', body, {
       headers: headers
     })
       .map(res => res.json())

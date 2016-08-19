@@ -9,10 +9,10 @@ import { AuthService } from "./auth.service";
         <h3>Please sign up to use all features</h3>
         <form [formGroup]="myForm" (ngSubmit)="onSignin()">
             <div class="form-group">
-                <label for="email">E-Mail</label>
-                <input formControlName="email" type="email" id="email" class="form-control">
+                <label for="username">User name</label>
+                <input formControlName="username" type="text" id="username" class="form-control">
             </div>
-            <div class="input-group">
+            <div class="form-group">
                 <label for="password">Password</label>
                 <input formControlName="password" type="password" id="password" class="form-control">
             </div>
@@ -43,7 +43,7 @@ export class SigninComponent implements OnInit {
 
     ngOnInit(): any {
         this.myForm = this.fb.group({
-            email: ['', Validators.required],
+            username: ['', Validators.required],
             password: ['', Validators.required],
         });
     }

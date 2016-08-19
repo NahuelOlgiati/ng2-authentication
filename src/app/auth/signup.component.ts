@@ -14,6 +14,10 @@ import { AuthService } from "./auth.service";
                 <span *ngIf="!email.pristine && email.errors != null && email.errors['noEmail']">Invalid mail address</span>
             </div>
             <div class="form-group">
+                <label for="username">User name</label>
+                <input formControlName="username" type="text" id="username" class="form-control">
+            </div>
+            <div class="form-group">
                 <label for="password">Password</label>
                 <input formControlName="password" type="password" id="password" class="form-control">
             </div>
@@ -55,6 +59,7 @@ export class SignupComponent implements OnInit {
         this.authService.signupUser(this.myForm.value)
             .subscribe(
             res => {
+                console.log('Signup Finish: ' + res.success);
                 if (res.success) { // if user created successfully
                     // signin the new user
                     this.signin();
@@ -71,6 +76,7 @@ export class SignupComponent implements OnInit {
                 Validators.required,
                 this.isEmail
             ])],
+            username: ['', Validators.required],
             password: ['', Validators.required],
             confirmPassword: ['', Validators.compose([
                 Validators.required,
