@@ -12,20 +12,18 @@ export class DocumentTypeService {
 
   constructor(private http: Http) { }
 
-  getDocumentTypes() {
+  getDocumentTypes(): DocumentType[] {
     return this.documentTypes;
   }
 
   fetchData() {
     const headers = new Headers();
-    headers.append('Authorization', 'Basic ' + localStorage.getItem('token'));
     return this.http.get('http://localhost:8080/villegas-tax-portal/rest/documentType', {
       headers: headers
     })
       .map((response: Response) => response.json())
       .subscribe(
       (data: DocumentType[]) => {
-        console.log(data[0].description);
         this.documentTypes = data;
         this.documentTypesChanged.emit(this.documentTypes);
       }

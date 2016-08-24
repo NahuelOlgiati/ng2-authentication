@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DocumentType } from '../document-type';
 import { DocumentTypeService } from '../document-type.service';
 import { DocumentTypeItemComponent } from '../document-type-item/document-type-item.component';
+import { CustomHttpService } from '../../core/custom-http/custom-http.service';
 
 @Component({
   moduleId: module.id,
@@ -13,8 +14,17 @@ import { DocumentTypeItemComponent } from '../document-type-item/document-type-i
 export class DocumentTypeListComponent implements OnInit {
 
   documentTypes: DocumentType[] = [];
+  error: any;
 
-  constructor(private documentTypeService: DocumentTypeService) { }
+  text: string;
+  results: DocumentType[];
+
+  constructor(private documentTypeService: DocumentTypeService, private customHttpService: CustomHttpService) {
+    this.customHttpService.onError(err => {
+      this.error = err;
+      console.log("onError: " + err);
+    });
+  }
 
   ngOnInit() {
     this.documentTypeService.fetchData();
@@ -23,5 +33,11 @@ export class DocumentTypeListComponent implements OnInit {
       (documentTypes: DocumentType[]) => this.documentTypes = documentTypes
     );
   }
+
+  search(event) {
+        console.log("Begin Search...");
+        this.results = this.documentTypeService.getDocumentTypes();
+        console.log("End Search...");
+    }
 
 }

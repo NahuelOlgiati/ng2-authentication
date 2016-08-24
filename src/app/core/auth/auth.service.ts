@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { Subject } from "rxjs/Subject";
 import 'rxjs/Rx';
 
-import { User } from "../shared/user.interface";
+import { User } from "../../shared/interface/user.interface";
 
 @Injectable()
 export class AuthService {
@@ -68,7 +68,7 @@ export class AuthService {
     } else {
       isAuth = false;
     }
-    console.log('Is Authenticated:' + isAuth);
+    //console.log('Is Authenticated:' + isAuth);
     return isAuth;
   }
 }

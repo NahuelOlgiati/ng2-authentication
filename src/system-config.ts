@@ -7,10 +7,12 @@
  **********************************************************************************************/
 /** Map relative paths to URLs. */
 const map: any = {
+  'primeng': 'vendor/primeng'
 };
 
 /** User packages configuration. */
 const packages: any = {
+  'primeng': { defaultExtension: 'js' }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
