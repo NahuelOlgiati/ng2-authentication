@@ -3,7 +3,7 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { PanelModule, AutoCompleteModule, DataTableModule, SharedModule, TabViewModule} from 'primeng/primeng';
+import { PanelModule, AutoCompleteModule, DataTableModule, SharedModule, TabViewModule, CarouselModule, GrowlModule} from 'primeng/primeng';
 
 import { AppComponent }   from './app.component';
 import { HeaderComponent } from "./header.component";
@@ -25,7 +25,7 @@ import { CUSTOM_HTTP_PROVIDER } from "./core/custom-http/custom-http.provider";
         SignupComponent,
         ProtectedComponent
     ],
-    imports: [BrowserModule, HttpModule, AppRouterModule, FormsModule, ReactiveFormsModule, PanelModule, AutoCompleteModule, DataTableModule, SharedModule, TabViewModule],
+    imports: [BrowserModule, HttpModule, AppRouterModule, FormsModule, ReactiveFormsModule, PanelModule, AutoCompleteModule, DataTableModule, SharedModule, TabViewModule, CarouselModule, GrowlModule],
     providers: [
         AuthGuard,
         AuthService,

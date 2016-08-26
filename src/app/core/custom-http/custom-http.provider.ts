@@ -1,12 +1,13 @@
 import { Http, XHRBackend, RequestOptions } from '@angular/http';
 import { CustomHttp } from "./custom-http.http";
-import { CustomHttpService } from "./custom-http.service";
+import { GrowlMessageService } from "../growl-message/growl-message.service";
+import {Router} from '@angular/router';
 
-export const CUSTOM_HTTP_PROVIDER = [CustomHttpService,
+export const CUSTOM_HTTP_PROVIDER = [GrowlMessageService,
     {
         provide: Http,
-        useFactory: (backend: XHRBackend, defaultOptions: RequestOptions, customHttpService: CustomHttpService) => {
-            return new CustomHttp(backend, defaultOptions, customHttpService);
+        useFactory: (backend: XHRBackend, defaultOptions: RequestOptions, growlMessageService: GrowlMessageService, router: Router) => {
+            return new CustomHttp(backend, defaultOptions, growlMessageService, router);
         },
-        deps: [XHRBackend, RequestOptions, CustomHttpService]
+        deps: [XHRBackend, RequestOptions, GrowlMessageService, Router]
     }];

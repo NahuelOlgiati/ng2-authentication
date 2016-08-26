@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DocumentType } from '../document-type';
 import { DocumentTypeService } from '../document-type.service';
 import { DocumentTypeItemComponent } from '../document-type-item/document-type-item.component';
-import { CustomHttpService } from '../../core/custom-http/custom-http.service';
+import { GrowlMessageService } from '../../core/growl-message/growl-message.service';
 
 @Component({
   moduleId: module.id,
@@ -19,8 +19,8 @@ export class DocumentTypeListComponent implements OnInit {
   text: string;
   results: DocumentType[];
 
-  constructor(private documentTypeService: DocumentTypeService, private customHttpService: CustomHttpService) {
-    this.customHttpService.onError(err => {
+  constructor(private documentTypeService: DocumentTypeService, private growlMessageService: GrowlMessageService) {
+    this.growlMessageService.onError(err => {
       this.error = err;
       console.log("onError: " + err);
     });

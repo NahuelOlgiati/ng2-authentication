@@ -32,10 +32,8 @@ export class SigninComponent implements OnInit {
             .subscribe(
             res => {
                 if (res.success) {
-                    this.authService.saveToken(res.token);
+                    this.authService.saveToken(res.body);
                     this.router.navigate(['/']);
-                } else {
-                    this.error = res.msg;
                 }
             }
             )
