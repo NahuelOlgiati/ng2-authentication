@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl, REACTIVE_FORM_DIRECTIVES } from "@angular/forms";
-
+import { GrowlMessageService } from '../growl-message/growl-message.service';
 import { AuthService } from "./auth.service";
 
 @Component({
@@ -35,7 +34,7 @@ export class SignupComponent implements OnInit {
     error = false;
     errorMessage = '';
 
-    constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) { }
+    constructor(private fb: FormBuilder, private authService: AuthService, private growlMessageService: GrowlMessageService) { }
 
     // signin the new user if signup successfully
     signin() {
@@ -45,7 +44,9 @@ export class SignupComponent implements OnInit {
             res => {
                 if (res.success) {
                     this.authService.saveToken(res.body);
-                    this.router.navigate(['/']);
+                    this.growlMessageService.notifyError([{ severity: 'info', summary: 'Info Message', detail: 'Signin Sucess' }]);
+                } else {
+                    this.growlMessageService.notifyError([{ severity: 'error', summary: 'ErrorInfo Message', detail: 'Signin Unsuccessful' }]);
                 }
             }
             )
@@ -58,9 +59,10 @@ export class SignupComponent implements OnInit {
             .subscribe(
             res => {
                 console.log('Signup Finish: ' + res.success);
-                if (res.success) { // if user created successfully
-                    // signin the new user
+                if (res.success) {
                     this.signin();
+                } else {
+                    this.growlMessageService.notifyError([{ severity: 'error', summary: 'ErrorInfo Message', detail: 'Signup Unsuccessful' }]);
                 }
             }
             )

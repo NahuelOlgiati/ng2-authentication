@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, REACTIVE_FORM_DIRECTIVES } from "@angular/forms";
+import { GrowlMessageService } from '../growl-message/growl-message.service';
 
 import { AuthService } from "./auth.service";
 
@@ -25,18 +25,17 @@ export class SigninComponent implements OnInit {
     error = false;
     errorMessage = '';
 
-    constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) { }
+    constructor(private fb: FormBuilder, private authService: AuthService, private growlMessageService: GrowlMessageService) { }
 
     onSignin() {
         this.authService.signinUser(this.myForm.value)
             .subscribe(
             res => {
                 if (res.success) {
-                    this.authService.saveToken(res.body);
-                    this.router.navigate(['/']);
-                }
-            }
-            )
+                        this.authService.saveToken(res.body); 
+                        this.growlMessageService.notifyError([{severity:'info', summary:'Info Message', detail:'Signin Sucess'}]);
+                    }
+                })
     }
 
     ngOnInit(): any {
