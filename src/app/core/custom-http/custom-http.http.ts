@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Http, ConnectionBackend, Request, RequestOptions, RequestOptionsArgs, RequestMethod, Response, Headers} from '@angular/http';
-import {Router} from '@angular/router';
-import {GrowlMessageService} from '../growl-message/growl-message.service';
-import {Observable} from 'rxjs/Rx';
+import { Injectable } from '@angular/core';
+import { Http, ConnectionBackend, Request, RequestOptions, RequestOptionsArgs, RequestMethod, Response, Headers } from '@angular/http';
+import { Router } from '@angular/router';
+import { GrowlMessageService } from '../growl-message/growl-message.service';
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class CustomHttp extends Http {

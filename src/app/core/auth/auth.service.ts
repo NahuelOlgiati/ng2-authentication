@@ -21,7 +21,7 @@ export class AuthService {
     const body = 'email=' + user.email + '&username=' + user.username + '&password=' + user.password;
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post('http://localhost:8080/villegas-tax-portal/rest/authentication/signup', body, {
+    return this.http.post('http://localhost:8080/rest/authentication/signup', body, {
       headers: headers
     })
       .map((res:Response) => res.json())
@@ -37,7 +37,7 @@ export class AuthService {
     const body = 'username=' + user.username + '&password=' + user.password;
     const headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    return this.http.post('http://localhost:8080/villegas-tax-portal/rest/authentication/signin', body, {
+    return this.http.post('http://localhost:8080/rest/authentication/signin', body, {
       headers: headers
     })
       .map(res => res.json())

@@ -17,7 +17,7 @@ export class DocumentTypeService {
   }
 
   fetchData() {
-    return this.http.get('http://localhost:8080/villegas-tax-portal/rest/documentType')
+    return this.http.get('http://localhost:8080/rest/documentType')
       .map((response: Response) => response.json())
       .subscribe(
       (data: DocumentType[]) => {

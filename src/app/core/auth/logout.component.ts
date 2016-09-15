@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from "./auth.service";
 
 @Component({
-    selector: 't-logout',
+    selector: 'pri-logout',
     template: `
         <ul class="nav navbar-nav navbar-right">
             <li><a *ngIf="isAuth()" (click)="onLogout()" style="cursor: pointer;">Logout</a></li>

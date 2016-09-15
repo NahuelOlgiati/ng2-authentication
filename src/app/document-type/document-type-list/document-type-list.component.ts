@@ -1,15 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentType } from '../document-type';
 import { DocumentTypeService } from '../document-type.service';
-import { DocumentTypeItemComponent } from '../document-type-item/document-type-item.component';
 import { GrowlMessageService } from '../../core/growl-message/growl-message.service';
 
 @Component({
-  moduleId: module.id,
-  selector: 't-document-type-list',
-  templateUrl: 'document-type-list.component.html',
-  directives: [DocumentTypeItemComponent],
-  providers: [DocumentTypeService]
+  selector: 'pri-document-type-list',
+  templateUrl: 'document-type-list.component.html'
 })
 export class DocumentTypeListComponent implements OnInit {
 

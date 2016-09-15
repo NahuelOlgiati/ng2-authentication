@@ -1,13 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { ROUTER_DIRECTIVES } from "@angular/router";
-import {Message} from 'primeng/primeng';
+
+import { Message } from 'primeng/primeng';
 
 import { HeaderComponent } from "./header.component";
 import { GrowlMessageService } from "./core/growl-message/growl-message.service";
 
 @Component({
-  moduleId: module.id,
-  selector: 't-app',
+  selector: 'pri-app',
   templateUrl: 'app.component.html'
 })
 export class AppComponent implements OnInit {

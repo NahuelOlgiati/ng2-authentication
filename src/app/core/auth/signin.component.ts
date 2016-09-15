@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, REACTIVE_FORM_DIRECTIVES } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { GrowlMessageService } from '../growl-message/growl-message.service';
 
 import { AuthService } from "./auth.service";
